@@ -11,6 +11,7 @@
 ```bash
 pip install yahoo_finance_api2
 pip install -U yahoo_finance_api2
+pip install mplfinance
 ```
 
 condaにはなし
