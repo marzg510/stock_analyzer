@@ -6,6 +6,7 @@ import os
 from argparse import ArgumentParser
 import selenium_helper as helper
 import time
+import datetime
 import selenium.common.exceptions
 import pandas as pd
 
@@ -95,8 +96,8 @@ try:
         page_no += 1
         log.info("next page={}".format(page_no))
     # csv出力処理
-    # TODO:implement
-    df.to_csv("{}/codes.csv".format(OUTDIR),index=False)
+    df.to_csv(os.path.join(OUTDIR,"codes.csv"),index=False)
+    df.to_csv(os.path.join(OUTDIR,"codes_{}.csv".format(datetime.datetime.now().strftime("%Y%m%d"))),index=False)
     log.debug(df)
 
 except Exception as e:
