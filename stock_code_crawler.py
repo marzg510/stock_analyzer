@@ -9,6 +9,7 @@ import time
 import datetime
 import selenium.common.exceptions
 import pandas as pd
+from selenium.webdriver.common.by import By
 
 OUTDIR_SS='./log/ss/'
 OUTDIR='./data/stock_code/'
@@ -45,9 +46,9 @@ try:
     time.sleep(1)
     helper.ss(name='search_page')
     # チェックボックスをONに
-    e_chkbox_area = driver.find_element_by_xpath('//th[.="市場区分"]/following-sibling::td')
+    e_chkbox_area = driver.find_element(By.XPATH, '//th[.="市場区分"]/following-sibling::td')
     log.debug(e_chkbox_area.get_attribute("outerHTML"))
-    e_chkboxes = e_chkbox_area.find_elements_by_xpath('.//input[@type="checkbox"]')
+    e_chkboxes = e_chkbox_area.find_elements(By.XPATH, './/input[@type="checkbox"]')
     for e in e_chkboxes:
         log.debug(e.get_attribute("outerHTML"))
 #        if ( e.get_attribute("value")!="ETN"):
@@ -55,7 +56,7 @@ try:
         e.click()
     helper.ss(name='search_page_chk_on')
     # 検索
-    e_button = driver.find_element_by_xpath('//input[@type="button" and @name="searchButton"]')
+    e_button = driver.find_element(By.XPATH, '//input[@type="button" and @name="searchButton"]')
     log.debug(e_button.get_attribute("outerHTML"))
     e_button.click()
     time.sleep(3)
@@ -67,28 +68,28 @@ try:
                                          "支配株主等に関する事項","注意情報等","継続企業の前提の注記"])
     while True:
         helper.ss(name='search_result_page_{}'.format(page_no))
-        e_trs = driver.find_elements_by_xpath('//table[@class="tableStyle01 fontsizeS"]//tr/td/..')
+        e_trs = driver.find_elements(By.XPATH, '//table[@class="tableStyle01 fontsizeS"]//tr/td/..')
         for i,e_tr in enumerate(e_trs):
 #            log.debug("{},{}".format(i,e_tr.get_attribute("outerHTML")))
             if i % 2 == 0:  # 偶数行（見た目は奇数行）のとき
-                e_code = e_tr.find_element_by_xpath('.//td[1]')
-                e_market = e_tr.find_element_by_xpath('.//td[2]')
-                e_honsha = e_tr.find_element_by_xpath('.//td[3]')
-                e_kessan = e_tr.find_element_by_xpath('.//td[4]')
-                e_unit = e_tr.find_element_by_xpath('.//td[5]')
-                e_shihai = e_tr.find_element_by_xpath('.//td[6]')
-                e_warn = e_tr.find_element_by_xpath('.//td[7]')
-                e_warn2 = e_tr.find_element_by_xpath('.//td[8]')
+                e_code = e_tr.find_element(By.XPATH, './/td[1]')
+                e_market = e_tr.find_element(By.XPATH, './/td[2]')
+                e_honsha = e_tr.find_element(By.XPATH, './/td[3]')
+                e_kessan = e_tr.find_element(By.XPATH, './/td[4]')
+                e_unit = e_tr.find_element(By.XPATH, './/td[5]')
+                e_shihai = e_tr.find_element(By.XPATH, './/td[6]')
+                e_warn = e_tr.find_element(By.XPATH, './/td[7]')
+                e_warn2 = e_tr.find_element(By.XPATH, './/td[8]')
             else:
-                e_name = e_tr.find_element_by_xpath('.//td[1]')
-                e_biz_class = e_tr.find_element_by_xpath('.//td[2]')
+                e_name = e_tr.find_element(By.XPATH, './/td[1]')
+                e_biz_class = e_tr.find_element(By.XPATH, './/td[2]')
                 r = pd.Series([e_code.text,e_name.text,e_market.text,e_honsha.text,e_biz_class.text,e_kessan.text,e_unit.text,e_shihai.text,e_warn.text,e_warn2.text],
                                 index=df.columns)
                 df = df.append(r,ignore_index=True)
 #                log.debug("{},{},{},{}".format(i,e_code.text,e_name.text,e_market.text))
         # 次へボタンを押す
         try:
-            e_next = driver.find_element_by_xpath('//img[@alt="次へ"]')
+            e_next = driver.find_element(By.XPATH, '//img[@alt="次へ"]')
         except selenium.common.exceptions.NoSuchElementException:
             break
         e_next.click()
@@ -105,7 +106,7 @@ except Exception as e:
     print(e, file=sys.stderr)
 
 finally:
-    if ( driver is not None ):
+    if driver is not None:
         driver.quit()
         log.info("WebDriver Quit")
     log.info("end")
