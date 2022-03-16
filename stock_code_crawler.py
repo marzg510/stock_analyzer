@@ -42,7 +42,8 @@ try:
 
     # 東証上場会社情報サービス検索
     log.info("getting search page")
-    driver.get('https://www2.tse.or.jp/tseHpFront/JJK010010Action.do?Show=Show')
+#    driver.get('https://www2.tse.or.jp/tseHpFront/JJK010010Action.do?Show=Show')
+    driver.get('https://www2.jpx.co.jp/tseHpFront/JJK010010Action.do?Show=Show')
     time.sleep(1)
     helper.ss(name='search_page')
     # チェックボックスをONに
